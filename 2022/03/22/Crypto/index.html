@@ -1,0 +1,589 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>CTF | Yanmo312</title><meta name="keywords" content="CTF"><meta name="author" content="Yanmo312"><meta name="copyright" content="Yanmo312"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="攻防世界-crypto一、base64 题目：Y3liZXJwZWFjZXtXZWxjb21lX3RvX25ld19Xb3JsZCF9  1、知识补充一、什么是Base64?百度百科中对Base64有一个很好的解释：“Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，Base64就是一种基于64个可打印字符来表示二进制数据的方法”。 什么是“可打印字符”呢？为什么要用它来传输8Bi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF">
+<meta property="og:url" content="https://yanmo312.github.io/2022/03/22/Crypto/index.html">
+<meta property="og:site_name" content="Yanmo312">
+<meta property="og:description" content="攻防世界-crypto一、base64 题目：Y3liZXJwZWFjZXtXZWxjb21lX3RvX25ld19Xb3JsZCF9  1、知识补充一、什么是Base64?百度百科中对Base64有一个很好的解释：“Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，Base64就是一种基于64个可打印字符来表示二进制数据的方法”。 什么是“可打印字符”呢？为什么要用它来传输8Bi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://yanmo312.github.io/img/default.jpg">
+<meta property="article:published_time" content="2022-03-22T01:40:36.000Z">
+<meta property="article:modified_time" content="2022-09-08T07:58:18.078Z">
+<meta property="article:author" content="Yanmo312">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yanmo312.github.io/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://yanmo312.github.io/2022/03/22/Crypto/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/font.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CTF',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-08 15:58:18'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><link rel="stylesheet" href="APlayer.min.css"><div id="aplayer"></div><script src="https://cdn.jsdelivr.net/gh/radium-bit/res@master/live2d/autoload.js" async></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js" async></script><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.1.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Yanmo312</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CTF</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-03-22T01:40:36.000Z" title="Created 2022-03-22 09:40:36">2022-03-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-09-08T07:58:18.078Z" title="Updated 2022-09-08 15:58:18">2022-09-08</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">8.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>32min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CTF"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="攻防世界-crypto"><a href="#攻防世界-crypto" class="headerlink" title="攻防世界-crypto"></a>攻防世界-crypto</h1><h2 id="一、base64"><a href="#一、base64" class="headerlink" title="一、base64"></a>一、base64</h2><blockquote>
+<p>题目：Y3liZXJwZWFjZXtXZWxjb21lX3RvX25ld19Xb3JsZCF9</p>
+</blockquote>
+<h3 id="1、知识补充"><a href="#1、知识补充" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>一、什么是Base64?<br>百度百科中对Base64有一个很好的解释：“Base64是网络上最常见的用于传输8Bit字节码的编码方式之一，Base64就是一种基于64个可打印字符来表示二进制数据的方法”。</p>
+<p>什么是“可打印字符”呢？为什么要用它来传输8Bit字节码呢？在回答这两个问题之前我们有必要来思考一下什么情况下需要使用到Base64？Base64一般用于在HTTP协议下传输二进制数据，由于HTTP协议是文本协议，所以在HTTP协议下传输二进制数据需要将二进制数据转换为字符数据。然而直接转换是不行的。因为网络传输只能传输可打印字符。什么是可打印字符？在ASCII码中规定，0-31、127这33个字符属于控制字符，32-126这95个字符属于可打印字符，也就是说网络传输只能传输这95个字符，不在这个范围内的字符无法传输。那么该怎么才能传输其他字符呢？其中一种方式就是使用Base64。</p>
+<p>Base64，就是使用64个可打印字符来表示二进制数据的方法。Base64的索引与对应字符的关系如下表所示：</p>
+<p>​        <img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/1_or0box.png" alt="img"></p>
+<p>也就是说，如果将索引转换为对应的二进制数据的话需要至多6个Bit。然而ASCII码需要8个Bit来表示，那么怎么使用6个Bit来表示8个Bit的数据呢？6个Bit当然不能存储8个Bit的数据，但是4<em>6个Bit可以存储3</em>8个Bit的数据啊！如下表所示：</p>
+<p>​    <img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/2_s6eo47.png" alt="img">    </p>
+<p>可以看到“Son”通过Base64编码转换成了“U29u”。这是刚刚好的情况，3个ASCII字符刚好转换成对应的4个Base64字符。但是，当需要转换的字符数不是3的倍数的情况下该怎么办呢？Base64规定，当需要转换的字符不是3的倍数时，一律采用补0的方式凑足3的倍数，具体如下表所示：</p>
+<p>   <img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/3_ok9ii8.png" alt="img">     </p>
+<p>每6个Bit为一组，第一组转换后为字符“U”，第二组末尾补4个0转换后为字符“w”。剩下的使用“=”替代。即字符“S”通过Base64编码后为“Uw==”。这就是Base64的编码过程。</p>
+<h3 id="2、解答"><a href="#2、解答" class="headerlink" title="2、解答"></a>2、解答</h3><p>使用在线解答工具：<a target="_blank" rel="noopener" href="http://www.hiencode.com/base64.html">CTF在线工具-在线base编码|在线base解码|base16编码|base32编码|base64编码 (hiencode.com)</a></p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/4_btknnt.png" alt></p>
+<h3 id="3、注意"><a href="#3、注意" class="headerlink" title="3、注意"></a>3、注意</h3><p><strong>如何判断是否为base64加密</strong>?</p>
+<p>可以通过判断字符串是否具有base64编码的特点来确定。那么base64编码之后的字符串具有哪些特点：</p>
+<ul>
+<li>字符串只可能包含A-Z，a-z，0-9，+，/，=字符</li>
+<li>字符串长度是4的倍数</li>
+<li>=只会出现在字符串最后，可能没有或者一个等号或者两个等号</li>
+</ul>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/jinweilin/article/details/79587314">https://blog.csdn.net/jinweilin/article/details/79587314</a></p>
+<h2 id="二、Caesar（凯撒密码）"><a href="#二、Caesar（凯撒密码）" class="headerlink" title="二、Caesar（凯撒密码）"></a>二、Caesar（凯撒密码）</h2><blockquote>
+<p>题目：oknqdbqmoq{kag_tmhq_xqmdzqp_omqemd_qzodkbfuaz}</p>
+</blockquote>
+<h3 id="1、知识补充-1"><a href="#1、知识补充-1" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>一、 什么是凯撒密码？</p>
+<p>二、 凯撒密码的加密过程</p>
+<p>用凯撒密码加密，密钥是3</p>
+<p>三 、凯撒密码的解密过程</p>
+<p>用凯撒密码解密，密钥也是3</p>
+<p>四 、暴力破解凯撒密码</p>
+<p>在凯撒密码中，密钥就是字母表平移的数字。由于字母表只有26个字母，因此加密用的密钥只有0到25共26种（平移0个字母实际相对于没有加密）。</p>
+<p>按顺序将这26种密钥都尝试一遍。</p>
+<h3 id="2、解答-1"><a href="#2、解答-1" class="headerlink" title="2、解答"></a>2、解答</h3><p>使用在线解答工具<a target="_blank" rel="noopener" href="http://www.hiencode.com/caesar.html">CTF在线工具-在线凯撒密码加密|在线凯撒密码解密|凯撒密码算法|Caesar Cipher (hiencode.com)</a></p>
+<p>通过观察题干，由凯撒密码是通过移位实现的，正常应该是c开头，而题目是o开头，c~o是12位，所以key=12</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/5_bdqm9r.png" alt></p>
+<h3 id="3、注意-1"><a href="#3、注意-1" class="headerlink" title="3、注意"></a>3、注意</h3><p><strong>特定恺撒密码名称</strong></p>
+<p>根据偏移量的不同，还存在若干特定的恺撒密码名称：</p>
+<ul>
+<li>偏移量为10：Avocat(A→K)</li>
+<li>偏移量为13：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/ROT13">ROT13</a></li>
+<li>偏移量为-5：Cassis (K 6)</li>
+<li>偏移量为-6：Cassette (K 7)</li>
+</ul>
+<p><strong>如何看出凯撒密码</strong></p>
+<p>（1）攻击者知道（或者猜测）密码中使用了某个简单的替换加密方式，但是不确定是恺撒密码； </p>
+<p>（2）攻击者知道（或者猜测）使用了恺撒密码，但是不知道其偏移量。</p>
+<p> 对于第一种情况，攻击者可以通过使用诸如频率分析或者样式单词分析的方法， 马上就能从分析结果中看出规律，得出加密者使用的是恺撒密码。 </p>
+<p>对于第二种情况，解决方法更加简单。 由于使用恺撒密码进行加密的语言一般都是 字母文字 系统，因此密码中可能是使用的偏移量也是有限的，例如使用26个字母的 英语 ，它的偏移量最多就是25（偏移量26等同于偏移量0，即明文；偏移量超过26，等同于偏移量1-25）。 因此可以通过 穷举法 ，很轻易地进行破解。</p>
+<h2 id="三、Morse"><a href="#三、Morse" class="headerlink" title="三、Morse"></a>三、Morse</h2><blockquote>
+<p>题目：11 111 010 000 0 1010 111 100 0 00 000 000 111 00 10 1 0 010 0 000 1 00 10 110</p>
+</blockquote>
+<h3 id="1、知识补充-2"><a href="#1、知识补充-2" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>摩尔斯电码（又译为摩斯密码，Morse code）是一种时通时断的信号代码，通过不同的排列顺序来表达不同的英文字母、数字和标点符号。它发明于1837年，发明者有争议，是美国人塞缪尔·莫尔斯或者艾尔菲德·维尔。 摩尔斯电码是一种早期的数字化通信形式，但是它不同于现代只使用零和一两种状态的二进制代码，它的代码包括五种： 点、划、点和划之间的停顿、每个字符之间短的停顿、每个词之间中等的停顿以及句子之间长的停顿。<br>现在已经很少用了（但在解码方面还是有很大影响力）</p>
+<p>传递时的规则：<br>摩尔斯电码由两种基本信号组成：短促的点信号“·”，读“滴”；保持一定时间的长信号“—”，读“嗒”。间隔时间：滴=1t，嗒=3t，滴嗒间=1t，字符间=3t，单词间=7t。</p>
+<p>实现：<br>其实很简单，只是需要一一对应即可，以下便是常用的摩斯密码对应表。<br>至于为什么是这样对应的，你们可以去看一下一篇英文文章中出现每个字母的频率（或次数），为了节约传输字节，所以根据出现次数越多的编码越短（即E、T出现次数最多），所以形成了这样的规定，当然自己也可以更改成自己的规则（创建自己的字典），别人就破译不出来了。</p>
+<p>代码：<br>解码时需要知道字符串和分割标识符</p>
+<h3 id="2、解答-2"><a href="#2、解答-2" class="headerlink" title="2、解答"></a>2、解答</h3><p>摩斯密码使用 <code>.</code>、<code>-</code> 来表示不同含义，这里只用 <code>0</code>和<code>1</code></p>
+<p>结果：用·表示0，-表示0</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/6_py8keu.png" alt="image-20220311102234471"></p>
+<h3 id="3、注意-2"><a href="#3、注意-2" class="headerlink" title="3、注意"></a>3、注意</h3><p>反复出现两个、三个字符，考虑摩斯密码</p>
+<h2 id="四、幂数加密"><a href="#四、幂数加密" class="headerlink" title="四、幂数加密"></a>四、幂数加密</h2><blockquote>
+<p>题目：8842101220480224404014224202480122</p>
+<p>flag为cyberpeace{你解答出的八位大写字母}</p>
+</blockquote>
+<h3 id="1、知识补充-3"><a href="#1、知识补充-3" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>二进制幂数加密法，由于英文字母只有26个字母。只要2的0、1、2、3、4、5次幂就可以表示31个单元。通过用二进制幂数表示字母序号数来加密。</p>
+<p>二进制幂数加密法就是应用这个原理，由于英文字母只有26个字母，由公式可知，只要2的0、1、2、3、4、5次幂就可以表示31个单元。通过用二进制幂数表示字母序号数来加密。例如</p>
+<p>明文： d o n o t p u l l a l l y o u r e g g s i n o n e b a s k e t</p>
+<p>字母序号：4 15 14 15 20 16 21 12 12 1 12 12 25 15 21 18 5 7 7 19 9 14 15 14 5 2 1 19 11 5 20</p>
+<p>由于4=2^2 所以D加密过之后是2；15=2^0+2^1+2^2+2^3所以O加密后是0123。同理得到上述明文的加密后的密文</p>
+<p>密文：2 0123/123 0123 24/4 024 23 23/0 23 23/034 0123 024 14/02 012 012 014/03 123 /0123 123 02/1 0 014 013 02 24</p>
+<h3 id="2、解答-3"><a href="#2、解答-3" class="headerlink" title="2、解答"></a>2、解答</h3><p>##云影密码 此密码运用了1248代码，</p>
+<p>原理很简单，有了1，2，4，8这四个简单的数字，你可以以加法表示出0-9任何一个数字，例如0=28，7=124，9=18。 这样，再用1-26来表示A-Z，就可以用作密码了。 为了不至于混乱，我个人引入了第五个数字0，来用作间隔，以避免翻译错误，所以还可以称“01248密码”。</p>
+<p>题目上说结果为八位大写字母，所以要把txt文件中的数字分为8组，按0位间隔正好八组</p>
+<p>8842101220480224404014224202480122</p>
+<p>88421 0122 048 02244 04 0142242 0248 0122</p>
+<p>23         5       12    12      4      15        14      5<br>W          E            L      L       D       O         N      E</p>
+<p>代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="string">&quot;8842101220480224404014224202480122&quot;</span></span><br><span class="line">a = a.split(<span class="string">&quot;0&quot;</span>)</span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(a)):</span><br><span class="line">    <span class="built_in">str</span> = a[i]</span><br><span class="line">    <span class="built_in">sum</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">str</span>:</span><br><span class="line">        <span class="built_in">sum</span> += <span class="built_in">int</span>(i)</span><br><span class="line">    flag += <span class="built_in">chr</span>(<span class="built_in">sum</span> + <span class="number">64</span>)</span><br><span class="line"><span class="built_in">print</span> (flag)</span><br></pre></td></tr></table></figure>
+<h3 id="3、注意-3"><a href="#3、注意-3" class="headerlink" title="3、注意"></a>3、注意</h3><p>只有‘01248’出现时要注意幂数加密</p>
+<h2 id="五、Railfence"><a href="#五、Railfence" class="headerlink" title="五、Railfence"></a>五、Railfence</h2><blockquote>
+<p>题目：ccehgyaefnpeoobe{lcirg}epriec_ora_g</p>
+<p>是一副农家小院的 图画，上面画着一个农妇在栅栏里面喂5只小鸡</p>
+</blockquote>
+<h3 id="1、知识补充-4"><a href="#1、知识补充-4" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>栅栏密码的两种加密方式：</p>
+<p>第一种常规的顺序加密：</p>
+<p>明文：123456789</p>
+<p>加密栏数：3</p>
+<p>加密过程：<br>1.把明文的元素从上到下排成3行<br>1 4 7<br>2 5 8<br>3 6 9<br>2.再把3排结果从上到下拼接起来，即加密结果为<br>147258369</p>
+<p>第二种回形针式加密（W型）：</p>
+<p>明文：123456789</p>
+<p>加密栏数：3</p>
+<p>加密过程：<br>1.把明文的元素先从上到下排列，再从下到上排列，依次类推，直到把明文全部排列完为止</p>
+<p>1      5     9<br> 2  4  6  8<br>   3      7</p>
+<p>2.再把3排结果从上到下拼接起来，即加密结果为<br>159246837</p>
+<p>PS:因为排列的形态像一个字母”W”，所以被称为W型加密。</p>
+<h3 id="2、解答-4"><a href="#2、解答-4" class="headerlink" title="2、解答"></a>2、解答</h3><p>由<code>&#123;&#125;</code>里有5个字母，根据栅栏加密的规则，猜测key=5</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/7_p4s28g.png" alt="image-20220313152457995"></p>
+<h3 id="3、注意-4"><a href="#3、注意-4" class="headerlink" title="3、注意"></a>3、注意</h3><p>观察题目发现题目包含{}括号，flag应有元素齐全，所以仅是内容本身进行变化，且题干为栅栏的意思</p>
+<h2 id="六、不仅仅是Morse"><a href="#六、不仅仅是Morse" class="headerlink" title="六、不仅仅是Morse"></a>六、不仅仅是Morse</h2><blockquote>
+<p>题目：—/.-/-.—/..—.-/-…/./..—.-/…./.-/…-/./..—.-/.-/-./—-/-/…././.-./..—.-/-.././-.-./—-/-.././…./…./…./…./.-/.-/.-/.-/.-/-…/.-/.-/-…/-…/-…/.-/.-/-…/-…/.-/.-/.-/.-/.-/.-/.-/.-/-…/.-/.-/-…/.-/-…/.-/.-/.-/.-/.-/.-/.-/-…/-…/.-/-…/.-/.-/.-/-…/-…/.-/.-/.-/-…/-…/.-/.-/-…/.-/.-/.-/.-/-…/.-/-…/.-/.-/-…/.-/.-/.-/-…/-…/.-/-…/.-/.-/.-/-…/.-/.-/.-/-…/.-/.-/-…/.-/-…/-…/.-/.-/-…/-…/-…/.-/-…/.-/.-/.-/-…/.-/-…/.-/-…/-…/.-/.-/.-/-…/-…/.-/-…/.-/.-/.-/-…/.-/.-/-…/.-/.-/-…/.-/.-/.-/.-/-…/-…/.-/-…/-…/.-/.-/-…/-…/.-/.-/-…/.-/.-/-…/.-/.-/.-/-…/.-/.-/-…/.-/.-/-…/.-/.-/-…/.-/-…/.-/.-/-…/-…/.-/-…/.-/.-/.-/.-/-…/-…/.-/-…/.-/.-/-…/-…/.-</p>
+</blockquote>
+<h3 id="1、知识补充-5"><a href="#1、知识补充-5" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>摩斯电码会加上分隔符，具体相关知识见Morse</p>
+<p>培根密码，培根所用的密码是一种本质上用二进制数设计的，没有用通常的0和1来表示，而是采用a和b</p>
+<p><strong>一、培根密码加密方式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">第一种方式：</span><br><span class="line">A aaaaa B aaaab C aaaba D aaabb E aabaa F aabab G aabba H aabbb I abaaa J abaab</span><br><span class="line">K ababa L ababb M abbaa N abbab O abbba P abbbb Q baaaa R baaab S baaba T baabb</span><br><span class="line">U babaa V babab W babba X babbb Y bbaaa Z bbaab</span><br><span class="line"></span><br><span class="line">第二种方式</span><br><span class="line">a AAAAA   g AABBA    n ABBAA   t BAABA</span><br><span class="line">b AAAAB   h AABBB    o ABBAB   u-v BAABB</span><br><span class="line">c AAABA   i-j ABAAA  p ABBBA   w BABAA</span><br><span class="line">d AAABB   k ABAAB    q ABBBB   x BABAB</span><br><span class="line">e AABAA   l ABABA    r BAAAA   y BABBA</span><br><span class="line">f AABAB   m ABABB    s BAAAB   z BABBB</span><br></pre></td></tr></table></figure>
+<h3 id="2、解答-5"><a href="#2、解答-5" class="headerlink" title="2、解答"></a>2、解答</h3><p>将<code>/</code>视为分隔符，利用工具<a target="_blank" rel="noopener" href="http://www.ctftools.com/down/down/passwd/">密码机器 (ctftools.com)</a></p>
+<p>解出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">may be have another decodehhhhaaaaabaabbbaabbaaaaaaaabaababaaaaaaabbabaaabbaaabbaabaaaababaabaaabbabaaabaaabaababbaabbbabaaabababbaaabbabaaabaabaabaaaabbabbaabbaabaabaaabaabaabaababaabbabaaaabbabaabba</span><br></pre></td></tr></table></figure>
+<p>看出来后面的是培根密码</p>
+<p>再解密</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/8_uj18mm.png" alt="image-20220313153345327"></p>
+<h3 id="3、注意-5"><a href="#3、注意-5" class="headerlink" title="3、注意"></a>3、注意</h3><p>仅有a/b构成的密码考虑培根密码</p>
+<h2 id="七、混合编码"><a href="#七、混合编码" class="headerlink" title="七、混合编码"></a>七、混合编码</h2><blockquote>
+<p>题目：JiM3NjsmIzEyMjsmIzY5OyYjMTIwOyYjNzk7JiM4MzsmIzU2OyYjMTIwOyYjNzc7JiM2ODsmIzY5OyYjMTE4OyYjNzc7JiM4NDsmIzY1OyYjNTI7JiM3NjsmIzEyMjsmIzEwNzsmIzUzOyYjNzY7JiMxMjI7JiM2OTsmIzEyMDsmIzc3OyYjODM7JiM1NjsmIzEyMDsmIzc3OyYjNjg7JiMxMDc7JiMxMTg7JiM3NzsmIzg0OyYjNjU7JiMxMjA7JiM3NjsmIzEyMjsmIzY5OyYjMTIwOyYjNzg7JiMxMDU7JiM1NjsmIzEyMDsmIzc3OyYjODQ7JiM2OTsmIzExODsmIzc5OyYjODQ7JiM5OTsmIzExODsmIzc3OyYjODQ7JiM2OTsmIzUwOyYjNzY7JiMxMjI7JiM2OTsmIzEyMDsmIzc4OyYjMTA1OyYjNTY7JiM1MzsmIzc4OyYjMTIxOyYjNTY7JiM1MzsmIzc5OyYjODM7JiM1NjsmIzEyMDsmIzc3OyYjNjg7JiM5OTsmIzExODsmIzc5OyYjODQ7JiM5OTsmIzExODsmIzc3OyYjODQ7JiM2OTsmIzExOTsmIzc2OyYjMTIyOyYjNjk7JiMxMTk7JiM3NzsmIzY3OyYjNTY7JiMxMjA7JiM3NzsmIzY4OyYjNjU7JiMxMTg7JiM3NzsmIzg0OyYjNjU7JiMxMjA7JiM3NjsmIzEyMjsmIzY5OyYjMTE5OyYjNzc7JiMxMDU7JiM1NjsmIzEyMDsmIzc3OyYjNjg7JiM2OTsmIzExODsmIzc3OyYjODQ7JiM2OTsmIzExOTsmIzc2OyYjMTIyOyYjMTA3OyYjNTM7JiM3NjsmIzEyMjsmIzY5OyYjMTE5OyYjNzc7JiM4MzsmIzU2OyYjMTIwOyYjNzc7JiM4NDsmIzEwNzsmIzExODsmIzc3OyYjODQ7JiM2OTsmIzEyMDsmIzc2OyYjMTIyOyYjNjk7JiMxMjA7JiM3ODsmIzY3OyYjNTY7JiMxMjA7JiM3NzsmIzY4OyYjMTAzOyYjMTE4OyYjNzc7JiM4NDsmIzY1OyYjMTE5Ow==</p>
+</blockquote>
+<h3 id="1、知识补充-6"><a href="#1、知识补充-6" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/9_luee8y.png" alt="img"></p>
+<h3 id="2、解答-6"><a href="#2、解答-6" class="headerlink" title="2、解答"></a>2、解答</h3><p>观察密文，像是用base64加密，解密后出现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#79;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#69;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#52;&amp;#76;&amp;#122;&amp;#107;&amp;#53;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#77;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#107;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#105;&amp;#56;&amp;#120;&amp;#77;&amp;#84;&amp;#69;&amp;#118;&amp;#79;&amp;#84;&amp;#99;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#50;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#105;&amp;#56;&amp;#53;&amp;#78;&amp;#121;&amp;#56;&amp;#53;&amp;#79;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#99;&amp;#118;&amp;#79;&amp;#84;&amp;#99;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#119;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#67;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#65;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#105;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#69;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#119;&amp;#76;&amp;#122;&amp;#107;&amp;#53;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#84;&amp;#107;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#67;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#103;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#119;</span><br></pre></td></tr></table></figure>
+<p>了解后是Unicode编码，要转到ASCII</p>
+<p><a target="_blank" rel="noopener" href="https://www.sojson.com/unicode.html">Unicode编码转换 | Unicode在线转换 —在线工具 (sojson.com)</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LzExOS8xMDEvMTA4Lzk5LzExMS8xMDkvMTAxLzExNi8xMTEvOTcvMTE2LzExNi85Ny85OS8xMDcvOTcvMTEwLzEwMC8xMDAvMTAxLzEwMi8xMDEvMTEwLzk5LzEwMS8xMTkvMTExLzExNC8xMDgvMTAw</span><br></pre></td></tr></table></figure>
+<p>观察看仍然是一个base64加密</p>
+<p>解密后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/119/101/108/99/111/109/101/116/111/97/116/116/97/99/107/97/110/100/100/101/102/101/110/99/101/119/111/114/108/100</span><br></pre></td></tr></table></figure>
+<p>考虑到flag应全为小写字母，即ASCII码全部大于97，符合条件，对照表格转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcometoattackanddefenceworld</span><br></pre></td></tr></table></figure>
+<h3 id="3、注意-6"><a href="#3、注意-6" class="headerlink" title="3、注意"></a>3、注意</h3><p>辨识Unicode编码方式</p>
+<h2 id="八、easy-RSA"><a href="#八、easy-RSA" class="headerlink" title="八、easy_RSA"></a>八、easy_RSA</h2><blockquote>
+<p>题目：在一次RSA密钥对生成中，假设p=473398607161，q=4511491，e=17<br>求解出d</p>
+</blockquote>
+<h3 id="1、知识补充-7"><a href="#1、知识补充-7" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>RSA加密原理</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>步骤</strong></th>
+<th><strong>说明</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>备注</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>找出质数</td>
+<td>P 、Q</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2</td>
+<td>计算公共模数</td>
+<td>N = P * Q</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3</td>
+<td>欧拉函数</td>
+<td>φ(N) = (P-1)(Q-1)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>4</td>
+<td>计算公钥E</td>
+<td>1 &lt; E &lt; φ(N)</td>
+<td>E的取值必须是整数 E 和 φ(N) 必须是互质数</td>
+</tr>
+<tr>
+<td>5</td>
+<td>计算私钥D</td>
+<td>E * D % φ(N) = 1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>6</td>
+<td>加密</td>
+<td>C ＝ M E mod N</td>
+<td>C：密文 M：明文</td>
+</tr>
+<tr>
+<td>7</td>
+<td>解密</td>
+<td>M ＝C D mod N</td>
+<td>C：密文 M：明文</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=公钥&amp;spm=1001.2101.3001.7020">公钥</a>＝(E , N)<br>私钥＝(D, N)</p>
+<p>对外，我们只暴露公钥。</p>
+<ul>
+<li><strong>示例</strong></li>
+</ul>
+<p>1、找出质数 P 、Q</p>
+<p>P = 3   Q = 11</p>
+<ul>
+<li>1</li>
+<li>2</li>
+</ul>
+<p>2、计算公共模数</p>
+<p>N = P <em> Q = 3 </em> 11 = 33 N = 33</p>
+<ul>
+<li>1</li>
+<li>2</li>
+</ul>
+<p>3、 <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=欧拉函数&amp;spm=1001.2101.3001.7020">欧拉函数</a></p>
+<p>φ(N) = (P-1)(Q-1) = 2 * 10 = 20 φ(N) = 20</p>
+<ul>
+<li>1</li>
+<li>2</li>
+</ul>
+<p>4、计算公钥E</p>
+<p>1 &lt; E &lt; φ(N) 1 &lt;E &lt; 20</p>
+<ul>
+<li>1</li>
+<li>2</li>
+</ul>
+<p>E 的取值范围 {3, 7, 9, 11, 13, 17, 19}<br>E的取值必须是整数, E 和 φ(N) 必须是互质数<br>为了测试，我们取最小的值 <strong>E =3</strong><br>3 和 φ(N) =20 互为质数，满足条件</p>
+<p>5、计算私钥D</p>
+<p>E <em> D % φ(N) = 1 3 </em> D  % 20 = 1   </p>
+<ul>
+<li>1</li>
+<li>2</li>
+</ul>
+<p>根据上面可计算出 <strong>D = 7</strong></p>
+<p>6、公钥<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=加密&amp;spm=1001.2101.3001.7020">加密</a></p>
+<p>我们这里为了演示，就加密一个比较小的数字 M = 2</p>
+<p>公式：C ＝ ME mod N</p>
+<p>M = 2 E = 3 N = 33</p>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+<p>C = 23 % 33 = 8</p>
+<p>明文 <strong>“2”</strong> 经过 RSA 加密后变成了密文 <strong>“8”</strong></p>
+<p>7、私钥解密</p>
+<p>M ＝CD mod N</p>
+<p>C = 8 D = 7 N = 33</p>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+<p>M = 87 % 33<br>8 <em> 8 </em> 8 <em> 8 </em> 8 <em> 8 </em> 8=2097152<br>8 <em> 8 </em> 8 <em> 8 </em> 8 <em> 8 </em> 8 % 33 = 2</p>
+<p>密文 <strong>“8”</strong> 经过 RSA 解密后变成了明文 2。</p>
+<h3 id="2、解答-7"><a href="#2、解答-7" class="headerlink" title="2、解答"></a>2、解答</h3><p>1.先计算欧拉函数<br><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/10_cnzxuh.png" alt="在这里插入图片描述"><br>2.欧拉函数+1再除以17即是私钥<br><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549319/my_blog/CTF/Crypto_attackworld_j/11_fys6kd.png" alt="image-20220315135542087"></p>
+<h3 id="3、注意-7"><a href="#3、注意-7" class="headerlink" title="3、注意"></a>3、注意</h3><p>理解RSA加密原理</p>
+<h2 id="九、easychallenge"><a href="#九、easychallenge" class="headerlink" title="九、easychallenge"></a>九、easychallenge</h2><blockquote>
+<p>题目：附件下载下来发现是一个.pyc 文件</p>
+</blockquote>
+<h3 id="1、知识补充-8"><a href="#1、知识补充-8" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>pyc是一种二进制文件，是由py文件经过编译后，生成的文件，是一种byte code，py文件变成pyc文件后，运行加载的速度会有所提高；另一反面，把py文件编译为pyc文件，从而可以实现部分的源码隐藏，保证了python做商业化软件时的安全性</p>
+<p>用uncompyle6这个第三方python反编译器来进行反编译</p>
+<p>uncompyle6是一个原生python的跨版本反编译器和fragment反编译器，是decompyle、uncompyle、uncompyle2等的接替者。<br><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/12_snn8kz.png" alt="image-20220315151418174"></p>
+<h3 id="2、解答-8"><a href="#2、解答-8" class="headerlink" title="2、解答"></a>2、解答</h3><p>利用uncompyle6反编译得</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/13_c0zvzy.png" alt="image-20220315142107714"></p>
+<p>导出代码，修改由于版本不一样的错误：</p>
+<p>一共有两个，第一个是print’correct’报错，第二个是flag = raw_input()报错</p>
+<p>将 print’correct’改为 print(‘correct’)</p>
+<p>将 flag = raw_input() 改为 flag = eval(input())</p>
+<p>根据 这个加密运算过程，写出逆过程，将 final 值作为输入 进函数的值，然后以与之前相反的顺序调用函数，最 后输出的值就是 flag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##原代码</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode1</span>(<span class="params">ans</span>):</span><br><span class="line">    s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> ans:</span><br><span class="line">        x = <span class="built_in">ord</span>(i) ^ <span class="number">36</span></span><br><span class="line">        x = x + <span class="number">25</span></span><br><span class="line">        s += <span class="built_in">chr</span>(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode2</span>(<span class="params">ans</span>):</span><br><span class="line">    s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> ans:</span><br><span class="line">        x = <span class="built_in">ord</span>(i) + <span class="number">36</span></span><br><span class="line">        x = x ^ <span class="number">36</span></span><br><span class="line">        s += <span class="built_in">chr</span>(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode3</span>(<span class="params">ans</span>):</span><br><span class="line">    <span class="keyword">return</span> base64.b32encode(ans)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27; &#x27;</span></span><br><span class="line"><span class="built_in">print</span> (Please Input your flag:)</span><br><span class="line">flag = <span class="built_in">input</span>()</span><br><span class="line">final = <span class="string">&#x27;UC7KOWVXWVNKNIC2XCXKHKK2W5NLBKNOUOSK3LNNVWW3E===&#x27;</span></span><br><span class="line"><span class="keyword">if</span> encode3(encode2(encode1(flag))) == final:</span><br><span class="line">    <span class="built_in">print</span> (correct)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (wrong)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##修改后代码（改顺序）</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode1</span>(<span class="params">ans</span>):</span><br><span class="line">    s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> ans:</span><br><span class="line">        x = <span class="built_in">ord</span>(i) - <span class="number">25</span></span><br><span class="line">        x = x ^ <span class="number">36</span></span><br><span class="line">        s += <span class="built_in">chr</span>(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode2</span>(<span class="params">ans</span>):</span><br><span class="line">    s = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> ans:</span><br><span class="line">        x = <span class="built_in">ord</span>(i) ^ <span class="number">36</span></span><br><span class="line">        x = x - <span class="number">36</span></span><br><span class="line">        s += <span class="built_in">chr</span>(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode3</span>(<span class="params">ans</span>):</span><br><span class="line">    <span class="keyword">return</span> base64.b32decode(ans)</span><br><span class="line"></span><br><span class="line">final = <span class="string">&#x27;UC7KOWVXWVNKNIC2XCXKHKK2W5NLBKNOUOSK3LNNVWW3E===&#x27;</span></span><br><span class="line">flag = <span class="string">&#x27; &#x27;</span></span><br><span class="line">flag = encode1(encode2(encode3(final).decode(<span class="string">&#x27;ISO-8859-1&#x27;</span>)))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;flag=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(flag))</span><br></pre></td></tr></table></figure>
+<h3 id="3、注意-8"><a href="#3、注意-8" class="headerlink" title="3、注意"></a>3、注意</h3><p>（1）安装uncompyle6时出现“not on PATH”的问题：</p>
+<p>解决：export PATH=/home/kali/.local/bin/:$PATH</p>
+<p>（2）发现末尾有’===’，所以应该是 base32</p>
+<p>（3）改成 encode3(final).decode(‘ISO-8859-1’)之后，程序顺利运行</p>
+<p>？<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/19699367/for-line-in-results-in-unicodedecodeerror-utf-8-codec-cant-decode-byte">python - “for line in…” results in UnicodeDecodeError: ‘utf-8’ codec can’t decode byte - Stack Overflow</a></p>
+<h2 id="十、转轮机加密"><a href="#十、转轮机加密" class="headerlink" title="十、转轮机加密"></a>十、转轮机加密</h2><blockquote>
+<p>题目：</p>
+<p>1:  &lt; ZWAXJGDLUBVIQHKYPNTCRMOSFE &lt;<br>2:  &lt; KPBELNACZDTRXMJQOYHGVSFUWI &lt;<br>3:  &lt; BDMAIZVRNSJUWFHTEQGYXPLOCK &lt;<br>4:  &lt; RPLNDVHGFCUKTEBSXQYIZMJWAO &lt;<br>5:  &lt; IHFRLABEUOTSGJVDKCPMNZQWXY &lt;<br>6:  &lt; AMKGHIWPNYCJBFZDRUSLOQXVET &lt;<br>7:  &lt; GWTHSPYBXIZULVKMRAFDCEONJQ &lt;<br>8:  &lt; NOZUTWDCVRJLXKISEFAPMYGHBQ &lt;<br>9:  &lt; XPLTDSRFHENYVUBMCQWAOIKZGJ &lt;<br>10: &lt; UDNAJFBOWTGVRSCZQKELMXYIHP &lt;<br>11： &lt; MNBVCXZQWERTPOIUYALSKDJFHG &lt;<br>12： &lt; LVNCMXZPQOWEIURYTASBKJDFHG &lt;<br>13： &lt; JZQAWSXCDERFVBGTYHNUMKILOP &lt;</p>
+<p>密钥为：2,3,7,5,13,12,9,1,8,10,4,11,6<br>密文为：NFQKSEVOQOFNP</p>
+</blockquote>
+<h3 id="1、知识补充-9"><a href="#1、知识补充-9" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>加密学技术在几个世纪中不断地发展。托马斯杰斐逊，在17世纪末时，描述发表了一个在加密学中一个重大突破，但理论当时并没有实质建立过。他的发表，称为加密轮，由移动轮上的36个字母环组成，可用于实现复杂的编码上。这个概念是如此的先进，以至于它可以在第二次世界大战末期时，作为美国军事编码的基础。</p>
+<p>1.首先我们根据密钥来进行重新排列轮子</p>
+<p>2.密钥得数字就代表第几个轮子，如2，3，7，5…代表第一行换成原来第二行得，第二行换成原来第三行得，依次类推</p>
+<p>3.排好后根据密文，进行行内排列，如 KPBELNACZDTRXMJQOYHGVSFUWI 进行重新排列后，找到N所在位置，然后重新拼接 ‘NACZDTRXMJQOYHGVSFUWI’+’KPBEL’</p>
+<p>4.对所有行排好后按照列取</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/14_y5on76.png" alt></p>
+<h3 id="2、解答-9"><a href="#2、解答-9" class="headerlink" title="2、解答"></a>2、解答</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#转轮机加密</span></span><br><span class="line">original_wheel = [<span class="string">&#x27;ZWAXJGDLUBVIQHKYPNTCRMOSFE&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;PBELNACZDTRXMJQOYHGVSFUWI&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;BDMAIZVRNSJUWFHTEQGYXPLOCK&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;RPLNDVHGFCUKTEBSXQYIZMJWAO&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;IHFRLABEUOTSGJVDKCPMNZQWXY&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;AMKGHIWPNYCJBFZDRUSLOQXVET&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;GWTHSPYBXIZULVKMRAFDCEONJQ&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;NOZUTWDCVRJLXKISEFAPMYGHBQ&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;XPLTDSRFHENYVUBMCQWAOIKZGJ&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;UDNAJFBOWTGVRSCZQKELMXYIHP&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;MNBVCXZQWERTPOIUYALSKDJFHG&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;LVNCMXZPQOWEIURYTASBKJDFHG&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;JZQAWSXCDERFVBGTYHNUMKILOP &#x27;</span>]<span class="comment">#所给初始状态的轮转机</span></span><br><span class="line">shifted_wheel = []</span><br><span class="line">key = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">13</span>,<span class="number">12</span>,<span class="number">9</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">4</span>,<span class="number">11</span>,<span class="number">6</span>] <span class="comment">#所给密钥</span></span><br><span class="line">ciphertext = <span class="string">&#x27;NFQKSEVOQOFNP&#x27;</span> <span class="comment">#所给密文</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#按照密钥顺序对轮排序</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> key:</span><br><span class="line">    shifted_wheel.append(original_wheel[i-<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;按照密钥重新排序后的轮转机：\n&#x27;</span>,shifted_wheel)</span><br><span class="line"> </span><br><span class="line"><span class="comment">#按照密文顺序转动轮</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(shifted_wheel)):</span><br><span class="line">    index = shifted_wheel[i].index(ciphertext[i])</span><br><span class="line">    shifted_wheel[i] = shifted_wheel[i][index:]+shifted_wheel[i][<span class="number">0</span>:index]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;按照密文重新排序后的轮转机：\n&#x27;</span>,shifted_wheel)</span><br><span class="line"> </span><br><span class="line"><span class="comment">#读取所有恢复的明文</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;输出所有可能的明文：&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(shifted_wheel[<span class="number">0</span>])):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(shifted_wheel)):</span><br><span class="line">        <span class="built_in">print</span>(shifted_wheel[j][i],end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>结合语境，得出答案</p>
+<p>3、注意</p>
+<p>转轮机原理</p>
+<h2 id="十一、Normal-RSA"><a href="#十一、Normal-RSA" class="headerlink" title="十一、Normal_RSA"></a>十一、Normal_RSA</h2><blockquote>
+<p>题目：解压附件得到一个flag.enc文件和一个pubkey.pem文件</p>
+</blockquote>
+<h3 id="1、知识补充-10"><a href="#1、知识补充-10" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>遇到.pem .enc 或者是.der 文件格式时就要用上openssl</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/15_xaddur.png" alt="在这里插入图片描述"></p>
+<h3 id="2、解答-10"><a href="#2、解答-10" class="headerlink" title="2、解答"></a>2、解答</h3><p>首先遇到pubkey.pem，就是rsa 的公钥文件，把该文件拖到虚拟机Linux的桌面上，然后再进入该目录，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -in pubkey.pem -pubin -modulus -text</span><br></pre></td></tr></table></figure>
+<p>-in 是输入文件<br>-pubin是表示从文件中公钥（因为默认是读取私钥）<br>附加：-pubout是表示输出公钥（默认是输出私钥）<br>所以上面也可以换成这个：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -in pubkey.pem -pubin -pubout -modulus -text</span><br></pre></td></tr></table></figure>
+<p>结果都是一样的。<br>-text 是输出密钥的各种组件信息以及密钥文件本身的文本（但是不会直接输出公钥，所以需要下一句）<br>-modulus 是输出密钥模数（就是输出N）模N<br>实际上-text命令提供e,-modulus命令提供N</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549320/my_blog/CTF/Crypto_attackworld_j/16_gyhfww.png" alt="image-20220317173931445"></p>
+<p>图中的Exponent就是e，Modulus就是N。<br>-noout 命令是不输出密钥文件的文本内容，即上图中—BEGIN PUBLIC KEY–到—END PUBLIC KEY —的内容。<br>所以想要输出的内容美观一点，只需输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -in pubkey.pem -pubin -modulus -noout</span><br></pre></td></tr></table></figure>
+<p><strong>rsatool</strong>是一个简单的计算工具。</p>
+<p>有两种输入方法：一是输入p和q，另一种是输入n和d。之后让它生成一个完整的密钥文件（p,q,n,e,d）<br>使用方法：<br>一.输入p和q</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python rsatool.py -f DER -o key.pem -p 4184799299 -q 3303891593</span><br></pre></td></tr></table></figure>
+<p>二.输入n和d</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python  rsatool.py -f PEM -o key.pem -n 13826123222358393307 -d9793706120266356337</span><br></pre></td></tr></table></figure>
+<p>-f是输出文件的格式<br>-o是输出文件的名称</p>
+<p>最后我们可以得到key.pem 这个密钥文件，注意这是.pem文件，所以又得用openssl来操作。<br>解密：（假设待解密文件是flag.enc）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsautl -decrypt -in flag.enc  -inkey key.pem</span><br></pre></td></tr></table></figure>
+<p>-inkey 是用的密钥文件<br>-decrypt是解密<br>最后解密结果就会输出来了</p>
+<h3 id="3、注意-9"><a href="#3、注意-9" class="headerlink" title="3、注意"></a>3、注意</h3><p>遇到.pem .enc 或者是.der 文件格式时就要用上openssl了，一般都是给公钥文件以及flag文件让你求flag。</p>
+<h2 id="十二、easy-ECC"><a href="#十二、easy-ECC" class="headerlink" title="十二、easy_ECC"></a>十二、easy_ECC</h2><blockquote>
+<p>题目：已知椭圆曲线加密Ep(a,b)参数为</p>
+<p>p = 15424654874903</p>
+<p>a = 16546484</p>
+<p>b = 4548674875</p>
+<p>G(6478678675,5636379357093)</p>
+<p>私钥为</p>
+<p>k = 546768</p>
+<p>求公钥K(x,y)</p>
+</blockquote>
+<h3 id="1、知识补充-11"><a href="#1、知识补充-11" class="headerlink" title="1、知识补充"></a>1、知识补充</h3><p>椭圆曲线加密算法，即：Elliptic Curve Cryptography，简称ECC，是基于椭圆曲线数学理论实现的一种非对称加密算法。相比RSA，ECC优势是可以使用更短的密钥，来实现与RSA相当或更高的安全。据研究，160位ECC加密安全性相当于1024位RSA加密，210位ECC加密安全性相当于2048位RSA加密。</p>
+<p><strong>椭圆曲线</strong></p>
+<p>一般情况下，椭圆曲线可用下列方程式来表示，其中a,b,c,d为系数。</p>
+<blockquote>
+<p>E:y2=ax3+ bx2+cx+d</p>
+</blockquote>
+<p>例如，当a=1,b=0,c=-2,d=4时，所得到的椭圆曲线为:</p>
+<blockquote>
+<p>E:y2=x3-2x+4</p>
+</blockquote>
+<p>该椭圆曲线E的图像如图X-1所示，可以看出根本就不是椭圆形。</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/17_sz5had.png" alt></p>
+<p><strong>定义椭圆曲线的运算规则</strong></p>
+<p><strong>加法</strong></p>
+<p>过曲线上的两点A、B画一条直线，找到直线与椭圆曲线的交点，交点关于x轴对称位置的点，定义为A+B，即为加法。如下图所示：A + B = C</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/18_xt61dw.png" alt></p>
+<p><strong>二倍运算</strong></p>
+<p>上述方法无法解释A + A，即两点重合的情况。因此在这种情况下，将椭圆曲线在A点的切线，与椭圆曲线的交点，交点关于x轴对称位置的点，定义为A + A，即2A，即为二倍运算。</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/19_mi48ii.png" alt></p>
+<p><strong>正负取反</strong></p>
+<p>将A关于x轴对称位置的点定义为-A，即椭圆曲线的正负取反运算。如下图所示：</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/20_yhmwun.png" alt></p>
+<p><strong>无穷远点</strong></p>
+<p>如果将A与-A相加，过A与-A的直线平行于y轴，可以认为直线与椭圆曲线相交于无穷远点。</p>
+<p>综上，定义了A+B、2A运算，因此给定椭圆曲线的某一点G，可以求出2G、3G（即G + 2G）、4G……。即：当给定G点时，已知x，求xG点并不困难。反之，已知xG点，求x则非常困难。此即为椭圆曲线加密算法背后的数学原理。</p>
+<p><strong>有限域上的椭圆曲线运算</strong></p>
+<p>椭圆曲线要形成一条光滑的曲线，要求x,y取值均为实数，即实数域上的椭圆曲线。但椭圆曲线加密算法，并非使用实数域，而是使用有限域。按数论定义，有限域GF(p)指给定某个质数p，由0、1、2……p-1共p个元素组成的整数集合中定义的加减乘除运算。</p>
+<p>假设椭圆曲线为y² = x³ + x + 1，其在有限域GF(23)上时，写作：　　y² ≡ x³ + x + 1 (mod 23)</p>
+<p>此时，椭圆曲线不再是一条光滑曲线，而是一些不连续的点，如下图所示。以点(1,7)为例，7² ≡ 1³ + 1 + 1 ≡ 3 (mod 23)。如此还有如下点：</p>
+<p>(0,1) (0,22)　　(1,7) (1,16)　　(3,10) (3,13)　　(4,0)　　(5,4) (5,19)　　(6,4) (6,19)　　(7,11) (7,12)　　(9,7) (9,16)　　(11,3) (11,20)　　等等。</p>
+<p>另外，如果P(x,y)为椭圆曲线上的点，则-P即(x,-y)也为椭圆曲线上的点。如点P(0,1)，-P=(0,-1)=(0,22)也为椭圆曲线上的点。</p>
+<p><img src="https://res.cloudinary.com/yanmo312/image/upload/v1662549321/my_blog/CTF/Crypto_attackworld_j/21_pkaaib.png" alt></p>
+<p><strong>计算xG</strong></p>
+<p>相关公式如下：　　有限域GF(p)上的椭圆曲线y² = x³ + ax + b，若P(Xp, Yp), Q(Xq, Yq)，且P≠-Q，则R(Xr,Yr) = P+Q 由如下规则确定：</p>
+<p>Xr = (λ² - Xp - Xq) mod p　　Yr = (λ(Xp - Xr) - Yp) mod p　　其中λ = (Yq - Yp)/(Xq - Xp) mod p（若P≠Q）, λ = (3Xp² + a)/2Yp mod p（若P=Q）</p>
+<p>因此，有限域GF(23)上的椭圆曲线y² ≡ x³ + x + 1 (mod 23)，假设以(0,1)为G点，计算2G、3G、4G…xG等等，方法如下：</p>
+<p>计算2G：　　λ = (3x0² + 1)/2x1 mod 23 = (1/2) mod 23 = 12　　Xr = (12² - 0 - 0) mod 23 = 6　　Yr = (12(0 - 6) - 1) mod 23 = 19　　即2G为点(6,19)</p>
+<p>计算3G：　　3G = G + 2G，即(0,1) + (6,19)　　λ = (19 - 1)/(6 - 0) mod 23 = 3　　Xr = (3² - 0 - 6) mod 23 = 3　　Yr = (3(0 - 3) - 1) mod 23 = 13　　即3G为点(3, 13)</p>
+<p>同理计算4G、5G…xG　</p>
+<p><strong>椭圆曲线加解密算法原理</strong></p>
+<p>建立基于椭圆曲线的加密机制，需要找到类似RSA质因子分解或其他求离散对数这样的难题。而椭圆曲线上的已知G和xG求x，是非常困难的，此即为椭圆曲线上的的离散对数问题。此处x即为私钥，xG即为公钥。</p>
+<p>椭圆曲线加密算法原理如下：</p>
+<p>设私钥、公钥分别为k、K，即K = kG，其中G为G点。</p>
+<p>公钥加密：　　选择随机数r，将消息M生成密文C，该密文是一个点对，即：　　C = {rG, M+rK}，其中K为公钥</p>
+<p>私钥解密：　　M + rK - k(rG) = M + r(kG) - k(rG) = M　　其中k、K分别为私钥、公钥。</p>
+<p><strong>椭圆曲线签名算法原理</strong></p>
+<p>椭圆曲线签名算法，即ECDSA。　　设私钥、公钥分别为k、K，即K = kG，其中G为G点。</p>
+<p>私钥签名：　　1、选择随机数r，计算点rG(x, y)。　　2、根据随机数r、消息M的哈希h、私钥k，计算s = (h + kx)/r。　　3、将消息M、和签名{rG, s}发给接收方。</p>
+<p>公钥验证签名：　　1、接收方收到消息M、以及签名{rG=(x,y), s}。　　2、根据消息求哈希h。　　3、使用发送方公钥K计算：hG/s + xK/s，并与rG比较，如相等即验签成功。</p>
+<p>原理如下：　　hG/s + xK/s = hG/s + x(kG)/s = (h+xk)G/s　　= r(h+xk)G / (h+kx) = rG</p>
+<p><strong>签名过程</strong></p>
+<p>假设要签名的消息是一个字符串：“Hello World!”。DSA签名的第一个步骤是对待签名的消息生成一个消息摘要。不同的签名算法使用不同的消息摘要算法。而ECDSA256使用SHA256生成256比特的摘要。<br> 摘要生成结束后，应用签名算法对摘要进行签名：<br> 产生一个随机数k<br> 利用随机数k，计算出两个大数r和s。将r和s拼在一起就构成了对消息摘要的签名。<br> 这里需要注意的是，因为随机数k的存在，对于同一条消息，使用同一个算法，产生的签名是不一样的。从函数的角度来理解，签名函数对同样的输入会产生不同的输出。因为函数内部会将随机值混入签名的过程。</p>
+<p><strong>验证过程</strong></p>
+<p>关于验证过程，这里不讨论它的算法细节。从宏观上看，消息的接收方从签名中分离出r和s，然后利用公开的密钥信息和s计算出r。如果计算出的r和接收到的r值相同，则表示验证成功。否则，表示验证失败。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;crypto/ecdsa&quot;</span></span><br><span class="line">    <span class="string">&quot;crypto/elliptic&quot;</span></span><br><span class="line">    <span class="string">&quot;crypto/rand&quot;</span></span><br><span class="line">    <span class="string">&quot;crypto/sha256&quot;</span></span><br><span class="line">    <span class="string">&quot;math/big&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">//明文 </span></span><br><span class="line">    message := []<span class="type">byte</span>(<span class="string">&quot;Hello world&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    key, err := NewSigningKey()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    signature, err := Sign(message, key)</span><br><span class="line"></span><br><span class="line">    fmt.Printf(<span class="string">&quot;签名后：%x\n&quot;</span>, signature)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> !Verify(message, signature, &amp;key.PublicKey) &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;验证失败！&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;验证成功！&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewSigningKey</span><span class="params">()</span></span> (*ecdsa.PrivateKey, <span class="type">error</span>) &#123;</span><br><span class="line">    key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)</span><br><span class="line">    <span class="keyword">return</span> key, err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Sign signs arbitrary data using ECDSA.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Sign</span><span class="params">(data []<span class="type">byte</span>, privkey *ecdsa.PrivateKey)</span></span> ([]<span class="type">byte</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="comment">// hash message</span></span><br><span class="line">    digest := sha256.Sum256(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// sign the hash</span></span><br><span class="line">    r, s, err := ecdsa.Sign(rand.Reader, privkey, digest[:])</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// encode the signature &#123;R, S&#125;</span></span><br><span class="line">    <span class="comment">// big.Int.Bytes() will need padding in the case of leading zero bytes</span></span><br><span class="line">    params := privkey.Curve.Params()</span><br><span class="line">    curveOrderByteSize := params.P.BitLen() / <span class="number">8</span></span><br><span class="line">    rBytes, sBytes := r.Bytes(), s.Bytes()</span><br><span class="line">    signature := <span class="built_in">make</span>([]<span class="type">byte</span>, curveOrderByteSize*<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">copy</span>(signature[curveOrderByteSize-<span class="built_in">len</span>(rBytes):], rBytes)</span><br><span class="line">    <span class="built_in">copy</span>(signature[curveOrderByteSize*<span class="number">2</span>-<span class="built_in">len</span>(sBytes):], sBytes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> signature, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Verify checks a raw ECDSA signature.</span></span><br><span class="line"><span class="comment">// Returns true if it&#x27;s valid and false if not.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Verify</span><span class="params">(data, signature []<span class="type">byte</span>, pubkey *ecdsa.PublicKey)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    <span class="comment">// hash message</span></span><br><span class="line">    digest := sha256.Sum256(data)</span><br><span class="line"></span><br><span class="line">    curveOrderByteSize := pubkey.Curve.Params().P.BitLen() / <span class="number">8</span></span><br><span class="line"></span><br><span class="line">    r, s := <span class="built_in">new</span>(big.Int), <span class="built_in">new</span>(big.Int)</span><br><span class="line">    r.SetBytes(signature[:curveOrderByteSize])</span><br><span class="line">    s.SetBytes(signature[curveOrderByteSize:])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ecdsa.Verify(pubkey, digest[:], r, s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e41bc1eb1d81">椭圆曲线加密算法 - 简书 (jianshu.com)</a></p>
+<h3 id="2、解答-11"><a href="#2、解答-11" class="headerlink" title="2、解答"></a>2、解答</h3><p>使用脚本</p>
+<p>脚本一（欧几里得）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#椭圆曲线</span></span><br><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"> </span><br><span class="line">EllipticCurve = collections.namedtuple(<span class="string">&#x27;EllipticCurve&#x27;</span>, <span class="string">&#x27;name p a b g n h&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">curve = EllipticCurve(</span><br><span class="line">   <span class="string">&#x27;secp256k1&#x27;</span>,</span><br><span class="line">   <span class="comment"># Field characteristic.</span></span><br><span class="line">   p=<span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;p=&#x27;</span>)),</span><br><span class="line">   <span class="comment"># Curve coefficients.</span></span><br><span class="line">   a=<span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;a=&#x27;</span>)),</span><br><span class="line">   b=<span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;b=&#x27;</span>)),</span><br><span class="line">   <span class="comment"># Base point.</span></span><br><span class="line">   g=(<span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;Gx=&#x27;</span>)),</span><br><span class="line">      <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;Gy=&#x27;</span>))),</span><br><span class="line">   <span class="comment"># Subgroup order.</span></span><br><span class="line">   n=<span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&#x27;k=&#x27;</span>)),</span><br><span class="line">   <span class="comment"># Subgroup cofactor.</span></span><br><span class="line">   h=<span class="number">1</span>,</span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Modular arithmetic ##########################################################</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">inverse_mod</span>(<span class="params">k, p</span>):</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Returns the inverse of k modulo p.</span></span><br><span class="line"><span class="string">  This function returns the only integer x such that (x * k) % p == 1.</span></span><br><span class="line"><span class="string">  k must be non-zero and p must be a prime.</span></span><br><span class="line"><span class="string">  &quot;&quot;&quot;</span></span><br><span class="line">   <span class="keyword">if</span> k == <span class="number">0</span>:</span><br><span class="line">       <span class="keyword">raise</span> ZeroDivisionError(<span class="string">&#x27;division by zero&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> k &lt; <span class="number">0</span>:</span><br><span class="line">       <span class="comment"># k ** -1 = p - (-k) ** -1 (mod p)</span></span><br><span class="line">       <span class="keyword">return</span> p - inverse_mod(-k, p)</span><br><span class="line"> </span><br><span class="line">   <span class="comment"># Extended Euclidean algorithm.</span></span><br><span class="line">   s, old_s = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">   t, old_t = <span class="number">1</span>, <span class="number">0</span></span><br><span class="line">   r, old_r = p, k</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">while</span> r != <span class="number">0</span>:</span><br><span class="line">       quotient = old_r // r</span><br><span class="line">       old_r, r = r, old_r - quotient * r</span><br><span class="line">       old_s, s = s, old_s - quotient * s</span><br><span class="line">       old_t, t = t, old_t - quotient * t</span><br><span class="line"> </span><br><span class="line">   gcd, x, y = old_r, old_s, old_t</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">assert</span> gcd == <span class="number">1</span></span><br><span class="line">   <span class="keyword">assert</span> (k * x) % p == <span class="number">1</span></span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> x % p</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Functions that work on curve points #########################################</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_on_curve</span>(<span class="params">point</span>):</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Returns True if the given point lies on the elliptic curve.&quot;&quot;&quot;</span></span><br><span class="line">   <span class="keyword">if</span> point <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">       <span class="comment"># None represents the point at infinity.</span></span><br><span class="line">       <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"> </span><br><span class="line">   x, y = point</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> (y * y - x * x * x - curve.a * x - curve.b) % curve.p == <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">point_neg</span>(<span class="params">point</span>):</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Returns -point.&quot;&quot;&quot;</span></span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(point)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> point <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">       <span class="comment"># -0 = 0</span></span><br><span class="line">       <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"> </span><br><span class="line">   x, y = point</span><br><span class="line">   result = (x, -y % curve.p)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(result)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> result</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">point_add</span>(<span class="params">point1, point2</span>):</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Returns the result of point1 + point2 according to the group law.&quot;&quot;&quot;</span></span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(point1)</span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(point2)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> point1 <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">       <span class="comment"># 0 + point2 = point2</span></span><br><span class="line">       <span class="keyword">return</span> point2</span><br><span class="line">   <span class="keyword">if</span> point2 <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">       <span class="comment"># point1 + 0 = point1</span></span><br><span class="line">       <span class="keyword">return</span> point1</span><br><span class="line"> </span><br><span class="line">   x1, y1 = point1</span><br><span class="line">   x2, y2 = point2</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> x1 == x2 <span class="keyword">and</span> y1 != y2:</span><br><span class="line">       <span class="comment"># point1 + (-point1) = 0</span></span><br><span class="line">       <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> x1 == x2:</span><br><span class="line">       <span class="comment"># This is the case point1 == point2.</span></span><br><span class="line">       m = (<span class="number">3</span> * x1 * x1 + curve.a) * inverse_mod(<span class="number">2</span> * y1, curve.p)</span><br><span class="line">   <span class="keyword">else</span>:</span><br><span class="line">       <span class="comment"># This is the case point1 != point2.</span></span><br><span class="line">       m = (y1 - y2) * inverse_mod(x1 - x2, curve.p)</span><br><span class="line"> </span><br><span class="line">   x3 = m * m - x1 - x2</span><br><span class="line">   y3 = y1 + m * (x3 - x1)</span><br><span class="line">   result = (x3 % curve.p,</span><br><span class="line">             -y3 % curve.p)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(result)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> result</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">scalar_mult</span>(<span class="params">k, point</span>):</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Returns k * point computed using the double and point_add algorithm.&quot;&quot;&quot;</span></span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(point)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">   <span class="keyword">if</span> k &lt; <span class="number">0</span>:</span><br><span class="line">       <span class="comment"># k * point = -k * (-point)</span></span><br><span class="line">       <span class="keyword">return</span> scalar_mult(-k, point_neg(point))</span><br><span class="line"> </span><br><span class="line">   result = <span class="literal">None</span></span><br><span class="line">   addend = point</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">while</span> k:</span><br><span class="line">       <span class="keyword">if</span> k &amp; <span class="number">1</span>:</span><br><span class="line">           <span class="comment"># Add.</span></span><br><span class="line">           result = point_add(result, addend)</span><br><span class="line"> </span><br><span class="line">       <span class="comment"># Double.</span></span><br><span class="line">       addend = point_add(addend, addend)</span><br><span class="line"> </span><br><span class="line">       k &gt;&gt;= <span class="number">1</span></span><br><span class="line"> </span><br><span class="line">   <span class="keyword">assert</span> is_on_curve(result)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> result</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Keypair generation and ECDHE ################################################</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_keypair</span>():</span><br><span class="line">   <span class="string">&quot;&quot;&quot;Generates a random private-public key pair.&quot;&quot;&quot;</span></span><br><span class="line">   private_key = curve.n</span><br><span class="line">   public_key = scalar_mult(private_key, curve.g)</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">return</span> private_key, public_key</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">private_key, public_key = make_keypair()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;private key:&quot;</span>, <span class="built_in">hex</span>(private_key))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;public key: (0x&#123;:x&#125;, 0x&#123;:x&#125;)&quot;</span>.<span class="built_in">format</span>(*public_key))</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>脚本二（费马小定理）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#求 x 的 y 次方的模 </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">power</span>(<span class="params">x, y, mod</span>): </span><br><span class="line">    r = <span class="number">1</span> </span><br><span class="line">    <span class="keyword">while</span>( y ): </span><br><span class="line">        <span class="keyword">if</span> y &amp; <span class="number">1</span>: </span><br><span class="line">            r = (r * x) % mod </span><br><span class="line">        x = (x * x) % mod </span><br><span class="line">        y &gt;&gt;= <span class="number">1</span> </span><br><span class="line">    <span class="keyword">return</span> r </span><br><span class="line">Gx = <span class="number">6478678675</span> </span><br><span class="line">Gy = <span class="number">5636379357093</span> </span><br><span class="line">a = <span class="number">16546484</span> </span><br><span class="line">b = <span class="number">4548674875</span> </span><br><span class="line">p = <span class="number">15424654874903</span> </span><br><span class="line">k = <span class="number">546768</span> </span><br><span class="line">x = Gx </span><br><span class="line">y = Gy </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k-<span class="number">1</span>): </span><br><span class="line">    <span class="keyword">if</span> (x==Gx <span class="keyword">and</span> y==Gy): </span><br><span class="line">        inv = power(<span class="number">2</span>*Gy, p-<span class="number">2</span>,p) </span><br><span class="line">        temp = (<span class="number">3</span>*Gx*Gx+a)*inv%p </span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        inv = power((x-Gx), p-<span class="number">2</span>,p) </span><br><span class="line">        temp = (y-Gy)*inv%p </span><br><span class="line">    <span class="comment">#print(temp) </span></span><br><span class="line">    xr = (temp*temp-Gx-x)%p </span><br><span class="line">    yr = (temp*(x-xr)-y)%p </span><br><span class="line">    <span class="comment">#print(i,xr,yr) </span></span><br><span class="line">    x = xr </span><br><span class="line">    y = yr </span><br><span class="line"><span class="built_in">print</span>(x+y)</span><br></pre></td></tr></table></figure>
+<h3 id="3、注意-10"><a href="#3、注意-10" class="headerlink" title="3、注意"></a>3、注意</h3><p>对原理的理解？</p>
+<p>几个网站：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ruoli-s/p/14206145.html">CTF常见编码及加解密（超全） - ruoli-s - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Dome_/article/details/123333167">识别密文加密方式<em>K’illCode的博客-CSDN博客</em>识别加密方式</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Yanmo312</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://yanmo312.github.io/2022/03/22/Crypto/">https://yanmo312.github.io/2022/03/22/Crypto/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF/">CTF</a></div><div class="post_share"><div class="social-share" data-image="/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2022/07/09/Learning/"><img class="prev-cover" src="/img/category.jpg" onerror="onerror=null;src='/img/default.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Machine Learning--courses</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Yanmo312</div><div class="author-info__description">a blog for studying and playing :)</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">4</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Yanmo312"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Yanmo312" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:1211274465@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Keep holding on !!!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C-crypto"><span class="toc-number">1.</span> <span class="toc-text">攻防世界-crypto</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81base64"><span class="toc-number">1.1.</span> <span class="toc-text">一、base64</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Caesar%EF%BC%88%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二、Caesar（凯撒密码）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-1"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Morse"><span class="toc-number">1.3.</span> <span class="toc-text">三、Morse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-2"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-2"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-2"><span class="toc-number">1.3.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B9%82%E6%95%B0%E5%8A%A0%E5%AF%86"><span class="toc-number">1.4.</span> <span class="toc-text">四、幂数加密</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-3"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-3"><span class="toc-number">1.4.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81Railfence"><span class="toc-number">1.5.</span> <span class="toc-text">五、Railfence</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-4"><span class="toc-number">1.5.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-4"><span class="toc-number">1.5.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-4"><span class="toc-number">1.5.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AFMorse"><span class="toc-number">1.6.</span> <span class="toc-text">六、不仅仅是Morse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-5"><span class="toc-number">1.6.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-5"><span class="toc-number">1.6.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-5"><span class="toc-number">1.6.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%B7%B7%E5%90%88%E7%BC%96%E7%A0%81"><span class="toc-number">1.7.</span> <span class="toc-text">七、混合编码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-6"><span class="toc-number">1.7.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-6"><span class="toc-number">1.7.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-6"><span class="toc-number">1.7.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81easy-RSA"><span class="toc-number">1.8.</span> <span class="toc-text">八、easy_RSA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-7"><span class="toc-number">1.8.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-7"><span class="toc-number">1.8.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-7"><span class="toc-number">1.8.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81easychallenge"><span class="toc-number">1.9.</span> <span class="toc-text">九、easychallenge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-8"><span class="toc-number">1.9.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-8"><span class="toc-number">1.9.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-8"><span class="toc-number">1.9.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E8%BD%AC%E8%BD%AE%E6%9C%BA%E5%8A%A0%E5%AF%86"><span class="toc-number">1.10.</span> <span class="toc-text">十、转轮机加密</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-9"><span class="toc-number">1.10.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-9"><span class="toc-number">1.10.2.</span> <span class="toc-text">2、解答</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Normal-RSA"><span class="toc-number">1.11.</span> <span class="toc-text">十一、Normal_RSA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-10"><span class="toc-number">1.11.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-10"><span class="toc-number">1.11.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-9"><span class="toc-number">1.11.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81easy-ECC"><span class="toc-number">1.12.</span> <span class="toc-text">十二、easy_ECC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85-11"><span class="toc-number">1.12.1.</span> <span class="toc-text">1、知识补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E7%AD%94-11"><span class="toc-number">1.12.2.</span> <span class="toc-text">2、解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%B3%A8%E6%84%8F-10"><span class="toc-number">1.12.3.</span> <span class="toc-text">3、注意</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/09/01/Term%20Plan_2_1/" title="Term Plan"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/default.jpg'" alt="Term Plan"/></a><div class="content"><a class="title" href="/2022/09/01/Term%20Plan_2_1/" title="Term Plan">Term Plan</a><time datetime="2022-09-01T01:40:36.000Z" title="Created 2022-09-01 09:40:36">2022-09-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/20/Summer%20Vacation%20Plan/" title="Summer Vacation Plan"><img src="/img/tag.jpg" onerror="this.onerror=null;this.src='/img/default.jpg'" alt="Summer Vacation Plan"/></a><div class="content"><a class="title" href="/2022/07/20/Summer%20Vacation%20Plan/" title="Summer Vacation Plan">Summer Vacation Plan</a><time datetime="2022-07-20T14:37:55.000Z" title="Created 2022-07-20 22:37:55">2022-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/09/Learning/" title="Machine Learning--courses"><img src="/img/category.jpg" onerror="this.onerror=null;this.src='/img/default.jpg'" alt="Machine Learning--courses"/></a><div class="content"><a class="title" href="/2022/07/09/Learning/" title="Machine Learning--courses">Machine Learning--courses</a><time datetime="2022-07-09T13:53:55.000Z" title="Created 2022-07-09 21:53:55">2022-07-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/22/Crypto/" title="CTF"><img src="/img/default.jpg" onerror="this.onerror=null;this.src='/img/default.jpg'" alt="CTF"/></a><div class="content"><a class="title" href="/2022/03/22/Crypto/" title="CTF">CTF</a><time datetime="2022-03-22T01:40:36.000Z" title="Created 2022-03-22 09:40:36">2022-03-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022 By Yanmo312</div><div class="footer_custom_text">Keep quiet time for time</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script src="https://cdn.jsdelivr.net/gh/Yanmo312/Yanmo312.github.io/js/Plus.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
